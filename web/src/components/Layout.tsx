@@ -11,14 +11,24 @@ const Layout: React.FC = () => {
     navigate('/login');
   };
 
+  const toggleDarkMode = () => {
+    if (localStorage.theme === 'dark') {
+      document.documentElement.classList.remove('dark');
+      localStorage.theme = 'light';
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.theme = 'dark';
+    }
+  };
+
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <nav className="bg-gray-800 p-4">
-        <div className="container mx-auto flex justify-between">
+        <div className="container mx-auto flex justify-between items-center">
           <Link to="/" className="text-white text-lg">
             Diário de Craque
           </Link>
-          <div>
+          <div className="flex items-center">
             {token ? (
               <>
                 <Link
@@ -35,7 +45,7 @@ const Layout: React.FC = () => {
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="text-gray-300 hover:text-white"
+                  className="text-gray-300 hover:text-white mr-4"
                 >
                   Logout
                 </button>
@@ -50,12 +60,18 @@ const Layout: React.FC = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className="text-gray-300 hover:text-white"
+                  className="text-gray-300 hover:text-white mr-4"
                 >
                   Cadastro
                 </Link>
               </>
             )}
+            <button
+              onClick={toggleDarkMode}
+              className="text-gray-300 hover:text-white"
+            >
+              Toggle Dark Mode
+            </button>
           </div>
         </div>
       </nav>

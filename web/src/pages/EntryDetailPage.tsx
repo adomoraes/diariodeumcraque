@@ -23,13 +23,13 @@ const EntryDetailPage: React.FC = () => {
   }, [token, id]);
 
   if (!entry) {
-    return <div>Loading...</div>;
+    return <div className="text-gray-900 dark:text-gray-100">Loading...</div>;
   }
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Detalhes do Registro</h1>
-      <div className="p-4 border rounded">
+      <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Detalhes do Registro</h1>
+      <div className="p-4 border rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
         <p>{entry.content}</p>
         <Link to={`/diary/edit/${entry.id}`} className="text-blue-500 hover:underline mt-4 inline-block">
           Editar

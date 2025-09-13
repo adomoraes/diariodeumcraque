@@ -37,10 +37,10 @@ const EditEntryPage: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Editar Registro</h1>
-      <form onSubmit={handleSubmit}>
+      <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Editar Registro</h1>
+      <form onSubmit={handleSubmit} className="p-4 bg-white dark:bg-gray-800 shadow-md rounded">
         <textarea
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-50 dark:bg-gray-700"
           rows={4}
           value={content}
           onChange={(e) => setContent(e.target.value)}

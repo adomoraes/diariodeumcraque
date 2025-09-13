@@ -37,13 +37,13 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Dashboard</h1>
 
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-2">Novo Registro</h2>
+      <div className="mb-8 p-4 bg-white dark:bg-gray-800 shadow-md rounded">
+        <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Novo Registro</h2>
         <form onSubmit={handleSubmit}>
           <textarea
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-50 dark:bg-gray-700"
             rows={4}
             placeholder="Como foi seu treino hoje?"
             value={content}
@@ -59,10 +59,10 @@ const DashboardPage: React.FC = () => {
       </div>
 
       <div>
-        <h2 className="text-xl font-semibold mb-2">Meus Registros</h2>
+        <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Meus Registros</h2>
         <ul>
           {entries.map((entry) => (
-            <li key={entry.id} className="mb-2 p-2 border rounded">
+            <li key={entry.id} className="mb-2 p-2 border rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
               <Link to={`/diary/${entry.id}`} className="text-blue-500 hover:underline">
                 {entry.content.substring(0, 100)}...
               </Link>
