@@ -37,16 +37,16 @@ const EditEntryPage: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Editar Registro</h1>
-      <form onSubmit={handleSubmit} className="p-4 bg-white dark:bg-gray-800 shadow-md rounded">
+      <h1 className="text-2xl font-bold mb-4 text-light-darker dark:text-dark-lighter">Editar Registro</h1>
+      <form onSubmit={handleSubmit} className="p-4 bg-light-DEFAULT dark:bg-dark-light shadow-md rounded">
         <textarea
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-50 dark:bg-gray-700"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-light-dark dark:bg-dark-lighter"
           rows={4}
           value={content}
           onChange={(e) => setContent(e.target.value)}
         ></textarea>
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2"
+          className="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2"
           type="submit"
         >
           Salvar

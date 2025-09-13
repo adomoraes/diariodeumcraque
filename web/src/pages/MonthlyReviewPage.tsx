@@ -3,7 +3,7 @@ import React from 'react';
 const MonthlyReviewPage: React.FC = () => {
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Revisão Mensal</h1>
+      <h1 className="text-2xl font-bold mb-4 text-light-darker dark:text-dark-lighter">Revisão Mensal</h1>
       {/* Monthly review content will be implemented here */}
     </div>
   );

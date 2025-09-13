@@ -30,15 +30,15 @@ const WeeklyReviewPage: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Revisão Semanal</h1>
-      <div className="flex justify-around items-end bg-gray-100 dark:bg-gray-800 p-4 rounded-lg h-64">
+      <h1 className="text-2xl font-bold mb-4 text-light-darker dark:text-dark-lighter">Revisão Semanal</h1>
+      <div className="flex justify-around items-end bg-light-DEFAULT dark:bg-dark-light p-4 rounded-lg h-64">
         {data.map((item) => (
           <div key={item.day} className="flex flex-col items-center">
             <div
-              className="w-12 bg-blue-500"
+              className="w-12 bg-primary"
               style={{ height: `${(item.entries / maxEntries) * 100}%` }}
             ></div>
-            <span className="mt-2 text-sm text-gray-600 dark:text-gray-300">{item.day}</span>
+            <span className="mt-2 text-sm text-light-darker dark:text-dark-lighter">{item.day}</span>
           </div>
         ))}
       </div>

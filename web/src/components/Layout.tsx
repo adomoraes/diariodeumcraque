@@ -22,8 +22,8 @@ const Layout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <nav className="bg-gray-800 p-4">
+    <div className="min-h-screen bg-light-DEFAULT dark:bg-dark-DEFAULT text-light-darker dark:text-dark-lighter font-sans">
+      <nav className="bg-primary p-4">
         <div className="container mx-auto flex justify-between items-center">
           <Link to="/" className="text-white text-lg">
             Diário de Craque
@@ -33,19 +33,19 @@ const Layout: React.FC = () => {
               <>
                 <Link
                   to="/review/weekly"
-                  className="text-gray-300 hover:text-white mr-4"
+                  className="text-white hover:text-light-darker mr-4"
                 >
                   Revisão Semanal
                 </Link>
                 <Link
                   to="/review/monthly"
-                  className="text-gray-300 hover:text-white mr-4"
+                  className="text-white hover:text-light-darker mr-4"
                 >
                   Revisão Mensal
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="text-gray-300 hover:text-white mr-4"
+                  className="text-white hover:text-light-darker mr-4"
                 >
                   Logout
                 </button>
@@ -54,13 +54,13 @@ const Layout: React.FC = () => {
               <>
                 <Link
                   to="/login"
-                  className="text-gray-300 hover:text-white mr-4"
+                  className="text-white hover:text-light-darker mr-4"
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="text-gray-300 hover:text-white mr-4"
+                  className="text-white hover:text-light-darker mr-4"
                 >
                   Cadastro
                 </Link>
@@ -68,7 +68,7 @@ const Layout: React.FC = () => {
             )}
             <button
               onClick={toggleDarkMode}
-              className="text-gray-300 hover:text-white"
+              className="text-white hover:text-light-darker"
             >
               Toggle Dark Mode
             </button>

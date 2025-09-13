@@ -23,14 +23,14 @@ const LoginPage: React.FC = () => {
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-xs">
-        <h1 className="text-2xl font-bold mb-4 text-center text-gray-900 dark:text-gray-100">Login</h1>
-        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h1 className="text-2xl font-bold mb-4 text-light-darker dark:text-dark-lighter">Login</h1>
+        <form onSubmit={handleSubmit} className="bg-light-DEFAULT dark:bg-dark-light shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="mb-4">
             <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="email">
               Email
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-50 dark:bg-gray-700"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-light-dark dark:bg-dark-lighter"
               id="email"
               type="email"
               placeholder="Email"
@@ -43,7 +43,7 @@ const LoginPage: React.FC = () => {
               Senha
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 mb-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-50 dark:bg-gray-700"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 mb-3 leading-tight focus:outline-none focus:shadow-outline bg-light-dark dark:bg-dark-lighter"
               id="password"
               type="password"
               placeholder="******************"
@@ -53,7 +53,7 @@ const LoginPage: React.FC = () => {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
               Entrar
