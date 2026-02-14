@@ -1,0 +1,463 @@
+{
+	"info": {
+		"_postman_id": "diario-de-craque-api",
+		"name": "Diário de Craque API",
+		"description": "Coleção completa de testes para a API do Diário de Craque",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"jogador@email.com\",\n  \"name\": \"João Silva\",\n  \"pass\": \"senha123456\",\n  \"birthDate\": \"2010-05-15\"\n}"
+						},
+						"url": {
+							"raw": "{{api_url}}/auth/register",
+							"host": ["{{api_url}}"],
+							"path": ["auth", "register"]
+						},
+						"description": "Registrar novo usuário e obter access token"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200 || pm.response.code === 201) {",
+									"  const data = pm.response.json();",
+									"  pm.environment.set(\"access_token\", data.access_token);",
+									"  pm.environment.set(\"user_id\", data.user.id);",
+									"  pm.test(\"✅ Token salvo em access_token\", () => {",
+									"    pm.expect(data.access_token).to.exist;",
+									"  });",
+									"  pm.test(\"✅ User ID salvo\", () => {",
+									"    pm.expect(data.user.id).to.exist;",
+									"  });",
+									"}",
+									"",
+									"pm.test(\"✅ Resposta é 200 ou 201\", () => {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									"",
+									"pm.test(\"✅ Usuário criado com email correto\", () => {",
+									"  pm.expect(pm.response.json().user.email).to.equal(\"jogador@email.com\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"jogador@email.com\",\n  \"pass\": \"senha123456\"\n}"
+						},
+						"url": {
+							"raw": "{{api_url}}/auth/login",
+							"host": ["{{api_url}}"],
+							"path": ["auth", "login"]
+						},
+						"description": "Fazer login com email e senha"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"✅ Status 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"✅ Access token existe\", () => {",
+									"  pm.expect(pm.response.json().access_token).to.exist;",
+									"});",
+									"",
+									"if (pm.response.code === 200) {",
+									"  const data = pm.response.json();",
+									"  pm.environment.set(\"access_token\", data.access_token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Diary",
+			"item": [
+				{
+					"name": "Create Entry",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"date\": \"2025-02-14\",\n  \"focus\": \"Domínio de bola\",\n  \"notes\": \"Treino de técnica foi muito bom hoje\",\n  \"techniquRating\": 4,\n  \"physicalRating\": 3,\n  \"mentalRating\": 5,\n  \"whatWentWell\": \"Consegui fazer dribles bons\",\n  \"whatWasDifficult\": \"Chutes de longa distância\",\n  \"nextGoal\": \"Melhorar precisão nos passes\"\n}"
+						},
+						"url": {
+							"raw": "{{api_url}}/diary",
+							"host": ["{{api_url}}"],
+							"path": ["diary"]
+						},
+						"description": "Criar nova entrada de diário"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"✅ Status 201\", () => {",
+									"  pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"if (pm.response.code === 201) {",
+									"  const data = pm.response.json();",
+									"  pm.environment.set(\"entry_id\", data.id);",
+									"  pm.test(\"✅ Entry ID salvo\", () => {",
+									"    pm.expect(data.id).to.exist;",
+									"  });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "List Entries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/diary",
+							"host": ["{{api_url}}"],
+							"path": ["diary"]
+						},
+						"description": "Listar todas as entradas de diário do usuário"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"✅ Status 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"✅ Resposta é array\", () => {",
+									"  pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Entry by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/diary/{{entry_id}}",
+							"host": ["{{api_url}}"],
+							"path": ["diary", "{{entry_id}}"]
+						},
+						"description": "Obter detalhes de uma entrada específica"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"✅ Status 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"✅ Entry tem ID\", () => {",
+									"  pm.expect(pm.response.json().id).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Update Entry",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"focus\": \"Domínio de bola - ATUALIZADO\",\n  \"techniquRating\": 5,\n  \"notes\": \"Treino excelente\"\n}"
+						},
+						"url": {
+							"raw": "{{api_url}}/diary/{{entry_id}}",
+							"host": ["{{api_url}}"],
+							"path": ["diary", "{{entry_id}}"]
+						},
+						"description": "Atualizar uma entrada de diário"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"✅ Status 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"✅ Focus atualizado\", () => {",
+									"  pm.expect(pm.response.json().focus).to.include(\"ATUALIZADO\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Last Three Entries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/diary/last-three",
+							"host": ["{{api_url}}"],
+							"path": ["diary", "last-three"]
+						},
+						"description": "Obter as últimas 3 entradas"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"✅ Status 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"✅ Resposta é array com até 3 itens\", () => {",
+									"  const data = pm.response.json();",
+									"  pm.expect(data).to.be.an('array');",
+									"  pm.expect(data.length).to.be.lessThanOrEqual(3);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Weekly Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/diary/summary/weekly",
+							"host": ["{{api_url}}"],
+							"path": ["diary", "summary", "weekly"]
+						},
+						"description": "Obter resumo semanal com médias"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"✅ Status 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"✅ Tem campo total\", () => {",
+									"  pm.expect(pm.response.json().total).to.exist;",
+									"});",
+									"",
+									"pm.test(\"✅ Tem averageRatings\", () => {",
+									"  const data = pm.response.json();",
+									"  pm.expect(data.averageRatings).to.exist;",
+									"  pm.expect(data.averageRatings.technique).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Monthly Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/diary/summary/monthly?year=2025&month=2",
+							"host": ["{{api_url}}"],
+							"path": ["diary", "summary", "monthly"],
+							"query": [
+								{
+									"key": "year",
+									"value": "2025"
+								},
+								{
+									"key": "month",
+									"value": "2"
+								}
+							]
+						},
+						"description": "Obter resumo mensal com médias"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"✅ Status 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"✅ Year e month corretos\", () => {",
+									"  const data = pm.response.json();",
+									"  pm.expect(data.year).to.equal(2025);",
+									"  pm.expect(data.month).to.equal(2);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Delete Entry",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/diary/{{entry_id}}",
+							"host": ["{{api_url}}"],
+							"path": ["diary", "{{entry_id}}"]
+						},
+						"description": "Deletar uma entrada de diário"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"✅ Status 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "api_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "entry_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
