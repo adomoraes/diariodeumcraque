@@ -54,6 +54,37 @@ let AuthService = class AuthService {
         this.usersService = usersService;
         this.jwtService = jwtService;
     }
+    async register(registerDto) {
+        const existingUser = await this.usersService.findByEmail(registerDto.email);
+        if (existingUser) {
+            throw new common_1.BadRequestException('Email já está cadastrado');
+        }
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(registerDto.pass, salt);
+        const user = await this.usersService.create({
+            email: registerDto.email,
+            name: registerDto.name,
+            password: hashedPassword,
+            birthDate: registerDto.birthDate
+                ? new Date(registerDto.birthDate)
+                : undefined,
+        });
+        return this.generateTokens(user);
+    }
+    async login(loginDto) {
+        const user = await this.usersService.findByEmail(loginDto.email);
+        if (!user) {
+            throw new common_1.UnauthorizedException('Email ou senha inválidos');
+        }
+        const isPasswordValid = await bcrypt.compare(loginDto.pass, user.password);
+        if (!isPasswordValid) {
+            throw new common_1.UnauthorizedException('Email ou senha inválidos');
+        }
+        if (!user.isActive) {
+            throw new common_1.UnauthorizedException('Usuário desativado');
+        }
+        return this.generateTokens(user);
+    }
     async validateUser(email, pass) {
         const user = await this.usersService.findByEmail(email);
         if (user && (await bcrypt.compare(pass, user.password))) {
@@ -62,21 +93,18 @@ let AuthService = class AuthService {
         }
         return null;
     }
-    async login(user) {
-        const payload = { email: user.email, sub: user.id };
-        return {
-            access_token: this.jwtService.sign(payload),
+    generateTokens(user) {
+        const payload = { email: user.email, sub: user.id, role: user.role };
+        const response = {
+            access_token: this.jwtService.sign(payload, { expiresIn: '24h' }),
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                role: user.role,
+            },
         };
-    }
-    async register(createUserDto) {
-        const salt = await bcrypt.genSalt();
-        const password_hash = await bcrypt.hash(createUserDto.password_hash, salt);
-        const user = await this.usersService.create({
-            ...createUserDto,
-            password_hash,
-        });
-        const { password, ...result } = user;
-        return result;
+        return response;
     }
 };
 exports.AuthService = AuthService;

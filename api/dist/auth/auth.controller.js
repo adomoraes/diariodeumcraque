@@ -23,18 +23,10 @@ let AuthController = class AuthController {
         this.authService = authService;
     }
     async login(loginDto) {
-        const user = await this.authService.validateUser(loginDto.email, loginDto.pass);
-        if (!user) {
-            throw new common_1.UnauthorizedException();
-        }
-        return this.authService.login(user);
+        return this.authService.login(loginDto);
     }
     async register(registerDto) {
-        return this.authService.register({
-            email: registerDto.email,
-            name: registerDto.name,
-            password_hash: registerDto.pass,
-        });
+        return this.authService.register(registerDto);
     }
 };
 exports.AuthController = AuthController;

@@ -1,19 +1,38 @@
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 export declare class AuthService {
     private usersService;
     private jwtService;
     constructor(usersService: UsersService, jwtService: JwtService);
-    validateUser(email: string, pass: string): Promise<any>;
-    login(user: any): Promise<{
+    register(registerDto: RegisterDto): Promise<{
         access_token: string;
+        user: {
+            id: any;
+            email: any;
+            name: any;
+            role: any;
+        };
     }>;
-    register(createUserDto: CreateUserDto): Promise<{
-        name: string | null;
-        id: string;
+    login(loginDto: LoginDto): Promise<{
+        access_token: string;
+        user: {
+            id: any;
+            email: any;
+            name: any;
+            role: any;
+        };
+    }>;
+    validateUser(email: string, pass: string): Promise<{
         email: string;
+        name: string;
+        birthDate: Date | null;
+        id: string;
+        role: import("@prisma/client").$Enums.UserRole;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-    }>;
+    } | null>;
+    private generateTokens;
 }

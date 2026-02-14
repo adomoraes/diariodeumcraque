@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -8,24 +8,34 @@ import { User } from '@prisma/client';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    return this.prisma.user.create({
+  async create(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
+    const user = await this.prisma.user.create({
       data: {
         email: createUserDto.email,
         name: createUserDto.name,
-        password: createUserDto.password_hash,
+        password: createUserDto.password,
+        birthDate: createUserDto.birthDate,
+        role: 'ATHLETE',
+        isActive: true,
       },
     });
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 
-  async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+  async findAll(includeInactive = false): Promise<Omit<User, 'password'>[]> {
+    const where = includeInactive ? {} : { isActive: true };
+    const users = await this.prisma.user.findMany({ where });
+    return users.map(({ password, ...user }) => user);
   }
 
-  async findOne(id: string): Promise<User | null> {
-    return this.prisma.user.findUnique({
+  async findOne(id: string): Promise<Omit<User, 'password'> | null> {
+    const user = await this.prisma.user.findUnique({
       where: { id },
     });
+    if (!user) return null;
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -34,19 +44,33 @@ export class UsersService {
     });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    return this.prisma.user.update({
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<Omit<User, 'password'>> {
+    const user = await this.prisma.user.update({
       where: { id },
       data: {
         email: updateUserDto.email,
         name: updateUserDto.name,
-        password: updateUserDto.password_hash,
+        birthDate: updateUserDto.birthDate,
       },
     });
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 
-  async remove(id: string): Promise<User> {
-    return this.prisma.user.delete({
+  async remove(id: string): Promise<Omit<User, 'password'>> {
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { isActive: false },
+    });
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+  }
+
+  async findById(id: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
       where: { id },
     });
   }

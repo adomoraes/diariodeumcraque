@@ -1,3 +1,10 @@
 export declare class UpdateDiaryEntryDto {
-    content?: string;
+    focus?: string;
+    notes?: string;
+    techniquRating?: number;
+    physicalRating?: number;
+    mentalRating?: number;
+    whatWentWell?: string;
+    whatWasDifficult?: string;
+    nextGoal?: string;
 }

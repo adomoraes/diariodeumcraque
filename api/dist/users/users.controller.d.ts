@@ -4,52 +4,70 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
-    getProfile(req: any): Promise<{
-        name: string | null;
-        id: string;
+    getProfile(req: any): Promise<Omit<{
         email: string;
+        name: string;
         password: string;
+        birthDate: Date | null;
+        id: string;
+        role: import("@prisma/client").$Enums.UserRole;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-    } | null>;
-    create(createUserDto: CreateUserDto): Promise<{
-        name: string | null;
-        id: string;
+    }, "password"> | null>;
+    create(createUserDto: CreateUserDto): Promise<Omit<{
         email: string;
+        name: string;
         password: string;
+        birthDate: Date | null;
+        id: string;
+        role: import("@prisma/client").$Enums.UserRole;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-    }>;
-    findAll(): Promise<{
-        name: string | null;
-        id: string;
+    }, "password">>;
+    findAll(): Promise<Omit<{
         email: string;
+        name: string;
         password: string;
+        birthDate: Date | null;
+        id: string;
+        role: import("@prisma/client").$Enums.UserRole;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-    }[]>;
-    findOne(id: string): Promise<{
-        name: string | null;
-        id: string;
+    }, "password">[]>;
+    findOne(id: string): Promise<Omit<{
         email: string;
+        name: string;
         password: string;
+        birthDate: Date | null;
+        id: string;
+        role: import("@prisma/client").$Enums.UserRole;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-    } | null>;
-    update(id: string, updateUserDto: UpdateUserDto): Promise<{
-        name: string | null;
-        id: string;
+    }, "password"> | null>;
+    update(id: string, updateUserDto: UpdateUserDto): Promise<Omit<{
         email: string;
+        name: string;
         password: string;
+        birthDate: Date | null;
+        id: string;
+        role: import("@prisma/client").$Enums.UserRole;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-    }>;
-    remove(id: string): Promise<{
-        name: string | null;
-        id: string;
+    }, "password">>;
+    remove(id: string): Promise<Omit<{
         email: string;
+        name: string;
         password: string;
+        birthDate: Date | null;
+        id: string;
+        role: import("@prisma/client").$Enums.UserRole;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-    }>;
+    }, "password">>;
 }

@@ -8,20 +8,54 @@ datasource db {
 }
 
 model User {
-  id        String      @id @default(cuid())
-  email     String      @unique
+  id        String       @id @default(cuid())
+  email     String       @unique
   password  String
-  name      String?
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  name      String
+  birthDate DateTime?
+  role      UserRole     @default(ATHLETE)
+  isActive  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  
   entries   DiaryEntry[]
+  
+  @@index([email])
+  @@map("users")
+}
+
+enum UserRole {
+  ATHLETE
+  PARENT
+  COACH
+  ADMIN
 }
 
 model DiaryEntry {
-  id        String   @id @default(cuid())
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  content   String
+  id              String       @id @default(cuid())
+  author          User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId        String
+  
+  date            DateTime
+  focus           String?      // O que você focou no treino
+  notes           String?      // Anotações gerais
+  
+  // Autoavaliação (escala 1-5)
+  techniquRating  Int?         // Técnica
+  physicalRating  Int?         // Física
+  mentalRating    Int?         // Mental
+  
+  // Questões estruturadas
+  whatWentWell    String?      // O que fiz bem?
+  whatWasDifficult String?     // O que foi difícil?
+  nextGoal        String?      // Meta para o próximo treino
+  
+  isPublished     Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  
+  @@unique([authorId, date])
+  @@index([authorId])
+  @@index([date])
+  @@map("diary_entries")
 }

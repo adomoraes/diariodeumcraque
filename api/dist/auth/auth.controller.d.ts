@@ -6,12 +6,20 @@ export declare class AuthController {
     constructor(authService: AuthService);
     login(loginDto: LoginDto): Promise<{
         access_token: string;
+        user: {
+            id: any;
+            email: any;
+            name: any;
+            role: any;
+        };
     }>;
     register(registerDto: RegisterDto): Promise<{
-        name: string | null;
-        id: string;
-        email: string;
-        createdAt: Date;
-        updatedAt: Date;
+        access_token: string;
+        user: {
+            id: any;
+            email: any;
+            name: any;
+            role: any;
+        };
     }>;
 }

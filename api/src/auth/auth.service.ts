@@ -1,8 +1,13 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -11,32 +16,68 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
+  async register(registerDto: RegisterDto) {
+    // Verifica se usuario ja existe
+    const existingUser = await this.usersService.findByEmail(registerDto.email);
+    if (existingUser) {
+      throw new BadRequestException('Email já está cadastrado');
+    }
+
+    // Hash da senha
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(registerDto.pass, salt);
+
+    // Cria usuario
+    const user = await this.usersService.create({
+      email: registerDto.email,
+      name: registerDto.name,
+      password: hashedPassword,
+      birthDate: registerDto.birthDate
+        ? new Date(registerDto.birthDate)
+        : undefined,
+    });
+
+    return this.generateTokens(user);
+  }
+
+  async login(loginDto: LoginDto) {
+    const user = await this.usersService.findByEmail(loginDto.email);
+    if (!user) {
+      throw new UnauthorizedException('Email ou senha inválidos');
+    }
+
+    const isPasswordValid = await bcrypt.compare(loginDto.pass, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Email ou senha inválidos');
+    }
+
+    if (!user.isActive) {
+      throw new UnauthorizedException('Usuário desativado');
+    }
+
+    return this.generateTokens(user);
+  }
+
+  async validateUser(email: string, pass: string) {
     const user = await this.usersService.findByEmail(email);
     if (user && (await bcrypt.compare(pass, user.password))) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
     }
     return null;
   }
 
-  async login(user: any) {
-    const payload = { email: user.email, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
+  private generateTokens(user: any) {
+    const payload = { email: user.email, sub: user.id, role: user.role };
+    const response = {
+      access_token: this.jwtService.sign(payload, { expiresIn: '24h' }),
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
     };
-  }
-
-  async register(createUserDto: CreateUserDto) {
-    const salt = await bcrypt.genSalt();
-    const password_hash = await bcrypt.hash(createUserDto.password_hash, salt);
-    const user = await this.usersService.create({
-      ...createUserDto,
-      password_hash,
-    });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...result } = user;
-    return result;
+    return response;
   }
 }

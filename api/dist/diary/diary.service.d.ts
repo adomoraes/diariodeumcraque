@@ -7,8 +7,11 @@ export declare class DiaryService {
     constructor(prisma: PrismaService);
     create(createDiaryEntryDto: CreateDiaryEntryDto, authorId: string): Promise<DiaryEntry>;
     findAll(authorId: string): Promise<DiaryEntry[]>;
-    findOne(id: string, authorId: string): Promise<DiaryEntry | null>;
+    findOne(id: string, authorId: string): Promise<DiaryEntry>;
     update(id: string, updateDiaryEntryDto: UpdateDiaryEntryDto, authorId: string): Promise<DiaryEntry>;
     remove(id: string, authorId: string): Promise<DiaryEntry>;
     getWeeklySummary(authorId: string): Promise<any>;
+    getMonthlySummary(authorId: string, year: number, month: number): Promise<any>;
+    getLastThreeEntries(authorId: string): Promise<DiaryEntry[]>;
+    private calculateAverage;
 }
