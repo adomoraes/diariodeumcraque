@@ -64,6 +64,16 @@ export const update = async (id: string, data: any, token: string) => {
   return response.json();
 };
 
+export const remove = async (id: string, token: string) => {
+  const response = await fetch(`${API_URL}/diary/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.json();
+};
+
 export const getWeeklySummary = async (token: string) => {
   const response = await fetch(`${API_URL}/diary/summary/weekly`, {
     headers: {
@@ -71,4 +81,38 @@ export const getWeeklySummary = async (token: string) => {
     },
   });
   return response.json();
+};
+
+export const getLastThreeEntries = async (token: string) => {
+
+  const response = await fetch(`${API_URL}/diary/last-three`, {
+
+    headers: {
+
+      Authorization: `Bearer ${token}`,
+
+    },
+
+  });
+
+  return response.json();
+
+};
+
+
+
+export const getMonthlySummary = async (token: string, year: number, month: number) => {
+
+  const response = await fetch(`${API_URL}/diary/summary/monthly?year=${year}&month=${month}`, {
+
+    headers: {
+
+      Authorization: `Bearer ${token}`,
+
+    },
+
+  });
+
+  return response.json();
+
 };

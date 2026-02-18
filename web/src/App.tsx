@@ -8,6 +8,7 @@ import EntryDetailPage from "./pages/EntryDetailPage"
 import EditEntryPage from "./pages/EditEntryPage"
 import WeeklyReviewPage from "./pages/WeeklyReviewPage"
 import MonthlyReviewPage from "./pages/MonthlyReviewPage"
+import AllEntriesPage from "./pages/AllEntriesPage"
 
 // Componente ProtectedRoute
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -29,11 +30,11 @@ function App() {
 				{/* Rotas Públicas */}
 				<Route
 					path='/login'
-					element={isAuthenticated ? <Navigate to='/' /> : <LoginPage />}
+					element={isAuthenticated ? <Navigate to='/dashboard' /> : <LoginPage />}
 				/>
 				<Route
 					path='/register'
-					element={isAuthenticated ? <Navigate to='/' /> : <RegisterPage />}
+					element={isAuthenticated ? <Navigate to='/dashboard' /> : <RegisterPage />}
 				/>
 
 				{/* Rotas Protegidas */}
@@ -44,7 +45,9 @@ function App() {
 							<Layout />
 						</ProtectedRoute>
 					}>
-					<Route index element={<DashboardPage />} />
+					<Route index element={<Navigate to="/dashboard" />} />
+					<Route path="dashboard" element={<DashboardPage />} />
+					<Route path='diary/all' element={<AllEntriesPage />} />
 					<Route path='diary/:id' element={<EntryDetailPage />} />
 					<Route path='diary/edit/:id' element={<EditEntryPage />} />
 					<Route path='review/weekly' element={<WeeklyReviewPage />} />
@@ -54,7 +57,7 @@ function App() {
 				{/* Fallback */}
 				<Route
 					path='*'
-					element={<Navigate to={isAuthenticated ? "/" : "/login"} />}
+					element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />}
 				/>
 			</Routes>
 		</BrowserRouter>
