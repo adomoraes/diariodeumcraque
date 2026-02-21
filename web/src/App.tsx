@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { useAuthStore } from "./lib/store"
-import Layout from "./components/Layout"
-import LoginPage from "./pages/LoginPage"
-import RegisterPage from "./pages/RegisterPage"
-import DashboardPage from "./pages/DashboardPage"
-import EntryDetailPage from "./pages/EntryDetailPage"
-import EditEntryPage from "./pages/EditEntryPage"
-import WeeklyReviewPage from "./pages/WeeklyReviewPage"
-import MonthlyReviewPage from "./pages/MonthlyReviewPage"
-import AllEntriesPage from "./pages/AllEntriesPage"
+import { useAuthStore } from "./features/auth/store/authStore"
+import BaseLayout from "./components/layout/BaseLayout"
+import LoginPage from "./features/auth/pages/LoginPage"
+import RegisterPage from "./features/auth/pages/RegisterPage"
+import DashboardPage from "./features/diary/pages/DashboardPage"
+import EntryDetailPage from "./features/diary/pages/EntryDetailPage"
+import EditEntryPage from "./features/diary/pages/EditEntryPage"
+import WeeklyReviewPage from "./features/review/pages/WeeklyReviewPage"
+import MonthlyReviewPage from "./features/review/pages/MonthlyReviewPage"
+import AllEntriesPage from "./features/diary/pages/AllEntriesPage"
 
 // Componente ProtectedRoute
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -42,7 +42,7 @@ function App() {
 					path='/'
 					element={
 						<ProtectedRoute>
-							<Layout />
+							<BaseLayout />
 						</ProtectedRoute>
 					}>
 					<Route index element={<Navigate to="/dashboard" />} />
